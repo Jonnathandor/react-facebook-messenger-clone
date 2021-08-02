@@ -1,10 +1,12 @@
 import { useState, useEffect } from 'react';
 import './App.css';
-import { Button, FormControl, InputLabel, Input } from '@material-ui/core';
+import { FormControl, InputLabel, Input } from '@material-ui/core';
 import Message from './Message';
 import db from './firebase';
 import firebase from 'firebase';
 import FlipMove from 'react-flip-move';
+import SendIcon from '@material-ui/icons/Send';
+import { IconButton } from '@material-ui/core';
 
 function App() {
   const [input, setInput] = useState('');
@@ -12,7 +14,7 @@ function App() {
   const [username, setUsername] = useState('');
 
   useEffect(() => {
-    db.collection('messages').orderBy('timestamp', 'asc').onSnapshot(snapshot => {
+    db.collection('messages').orderBy('timestamp', 'desc').onSnapshot(snapshot => {
       setMessages(snapshot.docs.map(doc => ({ id: doc.id, message: doc.data()})))
     });
   }, []);
@@ -36,18 +38,20 @@ function App() {
 
   return (
     <div className="App">
-      <h1>Hello Clever Programmer</h1>
+      <h1>Hello There</h1>
       <h2>Welcome {username}</h2>
-      <form>
+      <form className="app__form">
         <FormControl>
           <InputLabel>Enter a message</InputLabel>
           <Input value={input} onChange={e => setInput(e.target.value)} />
-          <Button 
-          disabled={!input}
+
+          <IconButton disabled={!input}
           variant="contained"
           color="primary"
           type="submit" 
-          onClick={sendMessage}>Send Message</Button>
+          onClick={sendMessage}>
+            <SendIcon/>
+          </IconButton>
         </FormControl>
       </form>
 
